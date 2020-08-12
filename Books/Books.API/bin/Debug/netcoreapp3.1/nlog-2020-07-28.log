@@ -1,0 +1,870 @@
+2020-07-28 14:43:51.4256|INFO|Books.API.Program|Initializing application...
+2020-07-28 14:43:52.8162|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 14:43:53.5153|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 14:43:53.6865|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-28 14:43:53.8360|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (26ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-28 14:44:04.2123|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (202ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-28 14:44:04.2534|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (34ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-28 14:44:04.2692|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 14:44:04.3412|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-28 14:44:04.3536|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 14:44:04.3759|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-28 14:44:04.3903|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-28 14:44:04.4073|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-28 14:44:04.4357|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-28 14:44:04.4357|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-28 14:44:04.4544|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-28 14:44:04.4642|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-28 14:44:04.4780|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-28 14:44:04.4937|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-28 14:44:04.4937|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-28 14:44:04.5160|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-28 14:44:04.5570|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-28 14:44:04.5727|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-28 14:44:04.5727|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-28 14:44:04.5926|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-28 14:44:04.6109|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-28 14:44:04.6202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-28 14:44:04.6202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-28 14:44:04.6379|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-28 14:44:04.6379|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-28 14:44:04.6557|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-28 14:44:04.6685|INFO|Books.API.Program|Running host...
+2020-07-28 14:44:04.8021|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-28 14:44:04.8103|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-28 14:44:04.8103|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-28 14:44:04.8224|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-28 14:50:29.4619|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 79
+2020-07-28 14:50:29.4940|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 14:50:29.5193|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 14:50:29.7593|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 14:50:29.7813|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 14:50:29.9471|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (25ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 14:50:29.9814|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 14:50:30.0272|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult in 257.6763ms.
+2020-07-28 14:50:30.0467|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-28 14:50:30.0875|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 553.8143ms
+2020-07-28 14:50:30.0947|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 14:50:30.1069|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 645.9954ms 422 application/problem+json; charset=utf-8
+2020-07-28 14:54:32.3681|INFO|Books.API.Program|Initializing application...
+2020-07-28 14:54:33.4013|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 14:54:33.6132|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 14:54:33.6604|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-28 14:54:33.6814|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-28 14:54:43.9334|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (219ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-28 14:54:43.9808|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (37ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-28 14:54:43.9980|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 14:54:44.0730|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-28 14:54:44.0883|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 14:54:44.1141|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-28 14:54:44.1327|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-28 14:54:44.1524|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-28 14:54:44.1853|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-28 14:54:44.1974|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-28 14:54:44.1974|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-28 14:54:44.2206|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-28 14:54:44.2363|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-28 14:54:44.2539|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-28 14:54:44.2646|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-28 14:54:44.2778|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-28 14:54:44.3143|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-28 14:54:44.3316|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-28 14:54:44.3421|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-28 14:54:44.3544|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-28 14:54:44.3744|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-28 14:54:44.3845|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-28 14:54:44.3845|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-28 14:54:44.4044|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-28 14:54:44.4044|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-28 14:54:44.4246|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-28 14:54:44.4390|INFO|Books.API.Program|Running host...
+2020-07-28 14:54:44.5393|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-28 14:54:44.5481|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-28 14:54:44.5481|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-28 14:54:44.5623|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-28 14:54:49.5189|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 79
+2020-07-28 14:54:49.5547|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 14:54:49.5808|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 14:54:49.8251|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 14:54:49.8456|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 14:54:49.9907|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (22ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 14:54:50.0268|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 14:54:50.0737|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 237.7276ms.
+2020-07-28 14:54:50.0975|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-28 14:54:50.1395|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 542.267ms
+2020-07-28 14:54:50.1395|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 14:54:50.1600|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 642.2583ms 400 application/problem+json; charset=utf-8
+2020-07-28 15:04:05.5208|INFO|Books.API.Program|Initializing application...
+2020-07-28 15:04:06.5528|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:04:07.3969|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 15:04:07.5546|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-28 15:04:07.7148|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-28 15:04:18.2300|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (148ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-28 15:04:18.2791|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (39ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-28 15:04:18.2955|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 15:04:18.3706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-28 15:04:18.3856|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-28 15:04:18.4109|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-28 15:04:18.4284|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-28 15:04:18.4481|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-28 15:04:18.4834|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-28 15:04:18.4952|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-28 15:04:18.4952|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-28 15:04:18.5174|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-28 15:04:18.5326|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-28 15:04:18.5495|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-28 15:04:18.5600|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-28 15:04:18.5722|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-28 15:04:18.6116|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-28 15:04:18.6283|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-28 15:04:18.6379|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-28 15:04:18.6379|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-28 15:04:18.6691|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-28 15:04:18.6691|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-28 15:04:18.6891|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-28 15:04:18.6990|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-28 15:04:18.6990|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-28 15:04:18.7190|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-28 15:04:18.7330|INFO|Books.API.Program|Running host...
+2020-07-28 15:04:18.8320|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-28 15:04:18.8406|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-28 15:04:18.8406|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-28 15:04:18.8546|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-28 15:04:45.9681|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 110
+2020-07-28 15:04:46.0002|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:04:46.0247|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:04:46.2646|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:04:46.2822|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:04:46.4154|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (22ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:04:46.4490|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:04:46.5406|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 512)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Title] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;
+2020-07-28 15:04:46.5652|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 290.3208ms.
+2020-07-28 15:04:46.5818|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:04:46.5940|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 553.8652ms
+2020-07-28 15:04:46.5940|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:04:46.6134|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 646.1023ms 204 
+2020-07-28 15:05:02.4515|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:05:02.4646|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:05:02.4646|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:05:02.5052|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:05:02.5323|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:05:02.5467|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:05:02.5601|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 46.5026ms.
+2020-07-28 15:05:02.5808|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:05:02.6095|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 121.6355ms
+2020-07-28 15:05:02.6095|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:05:02.6264|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 175.3614ms 200 application/json; charset=utf-8
+2020-07-28 15:12:53.3324|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1?  
+2020-07-28 15:12:53.3448|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:12:53.3535|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:12:53.3846|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:12:53.3846|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:12:53.4412|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:12:53.4532|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 60.2021ms.
+2020-07-28 15:12:53.4888|WARN|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|No output formatter was found for content types 'application/atom+xml' to write the response.
+2020-07-28 15:12:53.4990|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 133.4076ms
+2020-07-28 15:12:53.4990|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:12:53.5156|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 183.6504ms 406 
+2020-07-28 15:13:04.7388|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:13:04.7555|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:13:04.7636|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:13:04.8001|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:13:04.8098|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:13:04.8249|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:13:04.8381|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 28.9934ms.
+2020-07-28 15:13:04.8576|WARN|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|No output formatter was found for content types 'application/atom+xml' to write the response.
+2020-07-28 15:13:04.8688|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 91.0999ms
+2020-07-28 15:13:04.8688|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:13:04.8870|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 148.7792ms 406 
+2020-07-28 15:13:16.0013|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:13:16.0140|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:13:16.0140|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:13:16.0567|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:13:16.0567|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:13:16.0806|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:13:16.0932|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 27.7933ms.
+2020-07-28 15:13:16.1123|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:13:16.1332|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 97.1708ms
+2020-07-28 15:13:16.1415|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:13:16.1522|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 150.9359ms 200 application/xml; charset=utf-8
+2020-07-28 15:21:23.2830|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 228
+2020-07-28 15:21:23.2968|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:21:23.2968|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:21:23.3389|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:21:23.3389|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:21:23.3960|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:21:23.4119|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:21:23.4388|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 256), @p1='?' (Size = 512)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Genre] = @p0, [Title] = @p1
+WHERE [Id] = @p2;
+SELECT @@ROWCOUNT;
+2020-07-28 15:21:23.4543|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 107.0558ms.
+2020-07-28 15:21:23.4683|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:21:23.4788|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 161.8247ms
+2020-07-28 15:21:23.4788|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:21:23.4957|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 213.1396ms 204 
+2020-07-28 15:22:43.4784|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:22:43.4784|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:22:43.4989|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:22:43.5285|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:22:43.5285|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:22:43.5511|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:22:43.5630|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 25.9279ms.
+2020-07-28 15:22:43.5800|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:22:43.5909|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 79.7027ms
+2020-07-28 15:22:43.5909|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:22:43.6086|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 130.5005ms 200 application/xml; charset=utf-8
+2020-07-28 15:22:47.8530|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:22:47.8530|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:22:47.8735|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:22:47.9033|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:22:47.9033|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:22:47.9259|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:22:47.9376|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 25.3198ms.
+2020-07-28 15:22:47.9564|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:22:47.9671|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 81.3898ms
+2020-07-28 15:22:47.9671|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:22:47.9852|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 132.4402ms 200 application/json; charset=utf-8
+2020-07-28 15:27:20.0021|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 77
+2020-07-28 15:27:20.0153|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:27:20.0153|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:27:20.0591|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:27:20.0591|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:27:20.1160|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:27:20.1332|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:27:20.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 1024)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Description] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;
+2020-07-28 15:27:20.1765|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 109.0676ms.
+2020-07-28 15:27:20.1912|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:27:20.2016|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 165.5677ms
+2020-07-28 15:27:20.2016|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:27:20.2192|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 217.1122ms 204 
+2020-07-28 15:29:11.8579|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:29:11.8711|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:29:11.8711|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:29:11.9152|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:29:11.9250|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:29:11.9400|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:29:11.9534|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 29.1023ms.
+2020-07-28 15:29:11.9747|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:29:11.9893|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 95.54ms
+2020-07-28 15:29:12.0008|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:29:12.0116|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 154.0301ms 200 application/json; charset=utf-8
+2020-07-28 15:42:50.5144|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 205
+2020-07-28 15:42:50.5295|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:42:50.5295|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:42:50.5716|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:42:50.5716|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:42:51.1414|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:42:51.2638|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:42:51.4504|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 1024), @p1='?' (Size = 512)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Description] = @p0, [Title] = @p1
+WHERE [Id] = @p2;
+SELECT @@ROWCOUNT;
+2020-07-28 15:42:51.7742|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 1194.1203ms.
+2020-07-28 15:42:51.9510|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:42:52.1272|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 1576.9806ms
+2020-07-28 15:42:52.2965|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:42:52.3064|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 1792.3483ms 204 
+2020-07-28 15:42:56.7087|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:42:56.7217|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:42:56.7298|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:42:56.7598|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:42:56.7598|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:42:56.7828|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:42:56.7948|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 25.9117ms.
+2020-07-28 15:42:56.8134|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:42:56.8247|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 82.0155ms
+2020-07-28 15:42:56.8247|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:42:56.8432|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 134.8301ms 200 application/json; charset=utf-8
+2020-07-28 15:45:51.7713|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 213
+2020-07-28 15:45:51.7898|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:45:51.7978|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:45:51.8345|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:45:51.8438|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:45:51.8568|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:45:51.8731|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:45:51.8991|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p2='?' (DbType = Int32), @p0='?' (Size = 1024), @p1='?' (Size = 512)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Description] = @p0, [Title] = @p1
+WHERE [Id] = @p2;
+SELECT @@ROWCOUNT;
+2020-07-28 15:45:51.9159|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 72.665ms.
+2020-07-28 15:45:51.9159|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:45:51.9411|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 128.8215ms
+2020-07-28 15:45:51.9489|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:45:51.9489|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 188.0937ms 204 
+2020-07-28 15:45:54.8873|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:45:54.8999|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:45:54.8999|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:45:54.9385|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:45:54.9474|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:45:54.9474|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:45:54.9725|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 25.4651ms.
+2020-07-28 15:45:54.9919|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:45:55.0056|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 84.7311ms
+2020-07-28 15:45:55.0140|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:45:55.0140|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 137.6916ms 200 application/json; charset=utf-8
+2020-07-28 15:48:42.9234|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 77
+2020-07-28 15:48:42.9358|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:48:42.9358|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:48:42.9794|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:48:42.9794|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:48:43.0043|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:48:43.0205|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:48:43.0465|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 1024)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Description] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;
+2020-07-28 15:48:43.0624|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 74.1544ms.
+2020-07-28 15:48:43.0770|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:48:43.0877|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 131.1175ms
+2020-07-28 15:48:43.0877|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:48:43.1052|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 182.0197ms 204 
+2020-07-28 15:48:46.2776|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:48:46.2938|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:48:46.2938|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:48:46.3375|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:48:46.3375|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:48:46.3609|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:48:46.3737|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 27.3083ms.
+2020-07-28 15:48:46.3953|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:48:46.4076|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 91.1496ms
+2020-07-28 15:48:46.4158|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:48:46.4158|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 149.0588ms 200 application/json; charset=utf-8
+2020-07-28 15:49:00.5717|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 223
+2020-07-28 15:49:00.5717|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:49:00.5937|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:49:00.6265|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:49:00.6362|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:49:00.6362|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:49:00.6651|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:49:00.6651|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult in 43.2879ms.
+2020-07-28 15:49:00.6962|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-28 15:49:00.7191|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 113.2137ms
+2020-07-28 15:49:00.7191|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:49:00.7373|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 165.8783ms 422 application/problem+json; charset=utf-8
+2020-07-28 15:49:16.4932|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 223
+2020-07-28 15:49:16.5057|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:49:16.5137|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:49:16.5473|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:49:16.5565|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:49:16.5565|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:49:16.5850|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:49:16.6099|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (Size = 1024)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Books] SET [Description] = @p0
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;
+2020-07-28 15:49:16.6287|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 72.446ms.
+2020-07-28 15:49:16.6451|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-28 15:49:16.6560|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 130.1396ms
+2020-07-28 15:49:16.6560|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:49:16.6734|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 180.5156ms 204 
+2020-07-28 15:49:26.6254|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-28 15:49:26.6382|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:49:26.6382|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:49:26.6747|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-28 15:49:26.6836|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:49:26.6964|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:49:26.6964|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 25.4227ms.
+2020-07-28 15:49:26.7285|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-28 15:49:26.7285|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 81.73ms
+2020-07-28 15:49:26.7487|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-28 15:49:26.7608|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 135.2516ms 200 application/json; charset=utf-8
+2020-07-28 15:52:41.8373|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1645 application/json-patch+json 77
+2020-07-28 15:52:41.8373|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:52:41.8588|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:52:41.8971|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:52:41.9085|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:52:41.9217|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:52:41.9324|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NotFoundResult in 26.5327ms.
+2020-07-28 15:52:41.9525|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2020-07-28 15:52:41.9661|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 90.5671ms
+2020-07-28 15:52:41.9661|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:52:41.9843|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 147.1417ms 404 application/problem+json; charset=utf-8
+2020-07-28 15:56:33.1188|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 77
+2020-07-28 15:56:33.1188|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:56:33.1429|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 15:56:33.1777|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 15:56:33.1918|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 15:56:33.2376|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 15:56:33.2537|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 15:56:33.2659|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult in 78.5647ms.
+2020-07-28 15:56:33.2829|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-28 15:56:33.2949|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 139.5035ms
+2020-07-28 15:56:33.2949|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 15:56:33.3144|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 196.1597ms 422 application/problem+json; charset=utf-8
+2020-07-28 16:05:07.2219|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 PATCH http://localhost:51004/api/books/1 application/json-patch+json 72
+2020-07-28 16:05:07.2347|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 16:05:07.2347|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "PartiallyUpdateBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.ActionResult PartiallyUpdateBook(Int32, Microsoft.AspNetCore.JsonPatch.JsonPatchDocument`1[Books.API.Models.BookForUpdateDto]) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-28 16:05:07.2758|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) - Validation state: Valid
+2020-07-28 16:05:07.2758|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-28 16:05:07.3328|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-28 16:05:07.3491|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-28 16:05:07.3620|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API), returned result Microsoft.AspNetCore.Mvc.UnprocessableEntityObjectResult in 77.2431ms.
+2020-07-28 16:05:07.3795|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-28 16:05:07.3928|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API) in 137.4037ms
+2020-07-28 16:05:07.4015|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.PartiallyUpdateBook (Books.API)'
+2020-07-28 16:05:07.4015|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 191.2403ms 422 application/problem+json; charset=utf-8

@@ -1,0 +1,87 @@
+2020-03-05 10:17:55.4918|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 10:17:55.5181|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 10:17:55.5339|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 10:17:55.5339|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 10:18:02.9249|INFO|Books.API.Controllers.QuotesController|The book with id 26 was not found when trying to access quotes.
+2020-03-05 10:20:05.3373|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 10:20:05.3590|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 10:20:05.3590|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 10:20:05.3590|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 10:20:13.1646|INFO|Books.API.Controllers.QuotesController|The book with id 26 was not found when trying to access quotes.
+2020-03-05 10:27:54.6978|INFO|Books.API.Program|Initializing application...
+2020-03-05 10:27:55.1739|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 10:27:55.1739|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 10:27:55.1739|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 10:27:55.1993|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 10:58:04.4139|INFO|Books.API.Program|Initializing application...
+2020-03-05 10:58:04.9498|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 10:58:04.9498|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 10:58:04.9498|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 10:58:04.9746|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 10:58:12.6409|INFO|Books.API.Controllers.QuotesController|The book with id 26 was not found when trying to access quotes.
+2020-03-05 11:08:47.8944|INFO|Books.API.Program|Initializing application...
+2020-03-05 11:08:48.4280|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 11:08:48.4280|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 11:08:48.4351|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 11:08:48.4542|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 11:22:21.7065|INFO|Books.API.Program|Initializing application...
+2020-03-05 11:22:22.2081|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 11:22:22.2081|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 11:22:22.2153|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 11:22:22.2329|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 14:59:30.5073|INFO|Books.API.Program|Initializing application...
+2020-03-05 14:59:31.0102|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 14:59:31.0134|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 14:59:31.0134|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 14:59:31.0340|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 15:00:36.3642|INFO|Books.API.Program|Initializing application...
+2020-03-05 15:00:36.9430|FATAL|Microsoft.AspNetCore.Hosting.Diagnostics|Application startup exception
+2020-03-05 15:00:36.9699|ERROR|Books.API.Program|Exception occurred during initialization.
+2020-03-05 15:01:28.4646|INFO|Books.API.Program|Initializing application...
+2020-03-05 15:01:28.9760|FATAL|Microsoft.AspNetCore.Hosting.Diagnostics|Application startup exception
+2020-03-05 15:01:28.9972|ERROR|Books.API.Program|Exception occurred during initialization.
+2020-03-05 15:03:15.0608|INFO|Books.API.Program|Initializing application...
+2020-03-05 15:03:15.5471|FATAL|Microsoft.AspNetCore.Hosting.Diagnostics|Application startup exception
+2020-03-05 15:03:15.5674|ERROR|Books.API.Program|Exception occurred during initialization.
+2020-03-05 15:04:08.0372|INFO|Books.API.Program|Initializing application...
+2020-03-05 15:04:08.5190|FATAL|Microsoft.AspNetCore.Hosting.Diagnostics|Application startup exception
+2020-03-05 15:04:08.5418|ERROR|Books.API.Program|Exception occurred during initialization.
+2020-03-05 15:05:39.5158|INFO|Books.API.Program|Initializing application...
+2020-03-05 15:05:39.9992|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 15:05:39.9992|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Production
+2020-03-05 15:05:39.9992|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 15:05:40.0219|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 15:05:59.4106|INFO|Books.API.Program|Initializing application...
+2020-03-05 15:05:59.8780|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 15:05:59.8780|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Production
+2020-03-05 15:05:59.8780|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 15:05:59.9016|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 16:33:06.5520|INFO|Books.API.Program|Initializing application...
+2020-03-05 16:33:07.4430|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 16:33:07.4430|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 16:33:07.4505|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 16:33:07.4659|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 17:41:34.0057|INFO|Books.API.Program|Initializing application...
+2020-03-05 17:41:45.5033|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 17:41:45.5033|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 17:41:45.5105|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 17:41:45.5105|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 17:45:32.6419|INFO|Books.API.Program|Initializing application...
+2020-03-05 17:46:11.2434|INFO|Books.API.Program|Initializing application...
+2020-03-05 17:46:22.7411|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 17:46:22.7452|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 17:46:22.7452|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 17:46:22.7649|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 17:59:45.1360|INFO|Books.API.Program|Initializing application...
+2020-03-05 18:00:02.0634|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 18:00:02.0634|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 18:00:02.0634|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 18:00:02.0863|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-05 18:06:23.7471|INFO|Books.API.Program|Initializing application...
+2020-03-05 18:06:47.7706|INFO|Books.API.Program|Initializing application...
+2020-03-05 18:08:50.7555|INFO|Books.API.Program|Initializing application...
+2020-03-05 18:08:51.6369|ERROR|Books.API.Program|Exception occurred whilst migrating the database.
+2020-03-05 18:08:51.7490|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-05 18:08:51.7490|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-05 18:08:51.7490|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-05 18:08:51.7750|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.

@@ -1,0 +1,29 @@
+2020-03-17 16:21:16.3669|INFO|Books.API.Program|Initializing application...
+2020-03-17 16:21:30.3034|INFO|Microsoft.Hosting.Lifetime|Now listening on: https://localhost:5001
+2020-03-17 16:21:30.3034|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:5000
+2020-03-17 16:21:30.3169|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-17 16:21:30.3169|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-17 16:21:30.3169|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-17 16:22:40.8774|INFO|Books.API.Program|Initializing application...
+2020-03-17 16:22:52.5952|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:5000
+2020-03-17 16:22:52.5952|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-17 16:22:52.6110|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-17 16:22:52.6110|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-17 16:22:52.8599|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-17 16:23:44.1585|INFO|Books.API.Program|Initializing application...
+2020-03-17 16:23:55.9049|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:5000
+2020-03-17 16:23:55.9161|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-17 16:23:55.9161|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-17 16:23:55.9263|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-17 16:23:56.1357|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.
+2020-03-17 16:24:22.3212|INFO|Books.API.Program|Initializing application...
+2020-03-17 16:24:34.0486|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-03-17 16:24:34.0486|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-17 16:24:34.0486|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-17 16:24:34.0669|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-17 16:25:39.0378|INFO|Books.API.Program|Initializing application...
+2020-03-17 16:25:50.7098|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-03-17 16:25:50.7194|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-03-17 16:25:50.7194|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-03-17 16:25:50.7194|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-03-17 16:25:57.1220|WARN|Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware|Failed to determine the https port for redirect.

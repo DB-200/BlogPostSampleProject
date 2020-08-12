@@ -1,0 +1,1400 @@
+2020-07-30 15:36:44.6766|INFO|Books.API.Program|Initializing application...
+2020-07-30 15:36:46.0444|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:36:46.9357|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:36:47.0147|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 15:36:47.1575|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (16ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 15:36:57.5303|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (189ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 15:36:57.5708|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (33ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 15:36:57.5867|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:36:57.6603|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 15:36:57.6751|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:36:57.7008|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 15:36:57.7181|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 15:36:57.7365|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 15:36:57.7687|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 15:36:57.7799|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 15:36:57.7799|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 15:36:57.8018|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 15:36:57.8175|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 15:36:57.8352|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 15:36:57.8457|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 15:36:57.8584|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 15:36:57.8992|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 15:36:57.9173|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 15:36:57.9173|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 15:36:57.9406|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 15:36:57.9614|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 15:36:57.9716|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 15:36:57.9815|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 15:36:57.9815|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 15:36:58.0040|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 15:36:58.0148|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 15:36:58.0300|INFO|Books.API.Program|Running host...
+2020-07-30 15:36:58.1622|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 15:36:58.1711|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 15:36:58.1711|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 15:36:58.1842|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 15:37:16.9164|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1546  
+2020-07-30 15:37:16.9504|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:37:16.9757|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:37:17.1374|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:37:17.1610|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:37:17.3354|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (24ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:37:17.3506|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NotFoundResult in 202.3289ms.
+2020-07-30 15:37:17.3842|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2020-07-30 15:37:17.4627|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 470.5236ms
+2020-07-30 15:37:17.4702|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:37:17.4829|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 567.5583ms 404 application/problem+json; charset=utf-8
+2020-07-30 15:39:46.9528|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1?deleteEvenIfHasQuotes=false  
+2020-07-30 15:39:46.9654|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:39:46.9654|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:39:47.0055|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:39:47.0326|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:39:47.0472|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:39:47.0987|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:39:47.1092|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 95.7202ms.
+2020-07-30 15:39:47.1280|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'System.String'.
+2020-07-30 15:39:47.1387|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 154.1807ms
+2020-07-30 15:39:47.1387|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:39:47.1561|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 203.4661ms 400 application/json; charset=utf-8
+2020-07-30 15:44:39.1160|INFO|Books.API.Program|Initializing application...
+2020-07-30 15:44:40.1412|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:44:40.3482|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:44:40.3963|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 15:44:40.4168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 15:44:50.5835|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (136ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 15:44:50.6253|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (33ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 15:44:50.6422|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:44:50.7172|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 15:44:50.7313|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:44:50.7556|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 15:44:50.7723|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 15:44:50.7911|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 15:44:50.8227|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 15:44:50.8339|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 15:44:50.8443|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 15:44:50.8549|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 15:44:50.8549|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 15:44:50.8856|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 15:44:50.8856|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 15:44:50.9075|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 15:44:50.9427|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 15:44:50.9588|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 15:44:50.9690|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 15:44:50.9806|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 15:44:50.9995|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 15:44:50.9995|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 15:44:51.0181|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 15:44:51.0272|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 15:44:51.0272|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 15:44:51.0457|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 15:44:51.0590|INFO|Books.API.Program|Running host...
+2020-07-30 15:44:51.1509|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 15:44:51.1595|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 15:44:51.1664|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 15:44:51.1664|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 15:45:00.5109|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1?deleteEvenIfHasQuotes=false  
+2020-07-30 15:45:00.5437|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:45:00.5689|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:45:00.7263|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:45:00.7437|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:45:00.9212|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (27ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:45:00.9744|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:45:00.9882|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 251.3615ms.
+2020-07-30 15:45:01.0104|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type '<>f__AnonymousType2`1[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2020-07-30 15:45:01.0791|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 494.6025ms
+2020-07-30 15:45:01.0791|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:45:01.0985|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 588.4718ms 400 application/json; charset=utf-8
+2020-07-30 15:50:28.8326|INFO|Books.API.Program|Initializing application...
+2020-07-30 15:50:29.8625|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:50:30.0686|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:50:30.1149|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 15:50:30.1357|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 15:50:40.3475|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (179ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 15:50:40.3898|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (32ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 15:50:40.4061|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:50:40.4803|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 15:50:40.4951|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:50:40.5201|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 15:50:40.5371|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 15:50:40.5564|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 15:50:40.5885|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 15:50:40.5885|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 15:50:40.6110|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 15:50:40.6223|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 15:50:40.6374|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 15:50:40.6549|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 15:50:40.6549|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 15:50:40.6783|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 15:50:40.7136|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 15:50:40.7298|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 15:50:40.7298|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 15:50:40.7510|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 15:50:40.7701|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 15:50:40.7798|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 15:50:40.7798|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 15:50:40.7987|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 15:50:40.8082|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 15:50:40.8082|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 15:50:40.8313|INFO|Books.API.Program|Running host...
+2020-07-30 15:50:40.9259|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 15:50:40.9344|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 15:50:40.9344|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 15:50:40.9344|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 15:50:44.8727|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1?deleteEvenIfHasQuotes=false  
+2020-07-30 15:50:44.9045|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:50:44.9305|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:50:45.0895|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:50:45.1085|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:50:45.2846|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (25ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:50:45.3379|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:50:45.3519|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 251.7674ms.
+2020-07-30 15:50:45.3749|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2020-07-30 15:50:45.4448|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 498.2439ms
+2020-07-30 15:50:45.4529|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:50:45.4663|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 594.4975ms 400 application/json; charset=utf-8
+2020-07-30 15:52:33.6253|INFO|Books.API.Program|Initializing application...
+2020-07-30 15:52:34.6397|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:52:34.8453|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:52:34.8929|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 15:52:34.9136|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 15:52:45.1613|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (216ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 15:52:45.2091|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (38ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 15:52:45.2260|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:52:45.3013|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 15:52:45.3158|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:52:45.3454|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 15:52:45.3620|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 15:52:45.3809|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 15:52:45.4126|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 15:52:45.4243|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 15:52:45.4353|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 15:52:45.4353|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 15:52:45.4620|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 15:52:45.4787|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 15:52:45.4901|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 15:52:45.5029|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 15:52:45.5399|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 15:52:45.5567|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 15:52:45.5667|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 15:52:45.5781|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 15:52:45.5972|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 15:52:45.6070|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 15:52:45.6070|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 15:52:45.6260|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 15:52:45.6359|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 15:52:45.6359|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 15:52:45.6637|INFO|Books.API.Program|Running host...
+2020-07-30 15:52:45.7581|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 15:52:45.7667|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 15:52:45.7667|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 15:52:45.7802|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 15:52:50.5162|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1?deleteEvenIfHasQuotes=false  
+2020-07-30 15:52:50.5484|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:52:50.5741|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:52:50.7268|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:52:50.7450|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:52:50.9132|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (23ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:52:50.9644|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:52:50.9788|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 241.3869ms.
+2020-07-30 15:52:50.9996|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2020-07-30 15:52:51.0681|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 479.3443ms
+2020-07-30 15:52:51.0764|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:52:51.0893|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 574.1796ms 400 application/json; charset=utf-8
+2020-07-30 15:55:30.7400|INFO|Books.API.Program|Initializing application...
+2020-07-30 15:55:31.7833|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:55:31.9939|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:55:32.0403|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 15:55:32.0615|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 15:55:42.2316|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (138ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 15:55:42.2754|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (34ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 15:55:42.2921|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:55:42.3665|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 15:55:42.3816|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 15:55:42.4065|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 15:55:42.4236|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 15:55:42.4429|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 15:55:42.4752|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 15:55:42.4871|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 15:55:42.4982|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 15:55:42.4982|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 15:55:42.5249|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 15:55:42.5419|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 15:55:42.5419|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 15:55:42.5663|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 15:55:42.6018|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (12ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 15:55:42.6186|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 15:55:42.6293|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 15:55:42.6409|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 15:55:42.6604|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 15:55:42.6705|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 15:55:42.6705|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 15:55:42.6904|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 15:55:42.7003|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 15:55:42.7003|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 15:55:42.7234|INFO|Books.API.Program|Running host...
+2020-07-30 15:55:42.8179|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 15:55:42.8274|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 15:55:42.8274|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 15:55:42.8422|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 15:55:54.2913|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1?deleteEvenIfHasQuotes=false  
+2020-07-30 15:55:54.3258|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:55:54.3515|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:55:54.5096|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:55:54.5309|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:55:54.7038|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (24ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:55:54.7584|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:55:54.7731|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 251.4221ms.
+2020-07-30 15:55:54.7962|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2020-07-30 15:55:54.8659|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 498.3921ms
+2020-07-30 15:55:54.8744|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:55:54.8877|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 597.1383ms 400 application/json; charset=utf-8
+2020-07-30 15:56:01.3690|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1?deleteEvenIfHasQuotes=true  
+2020-07-30 15:56:01.3849|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:56:01.3849|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:56:01.4531|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:56:01.4809|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:56:01.4978|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:56:01.5224|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:56:01.6028|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [Quotations]
+WHERE [Id] = @p0;
+SELECT @@ROWCOUNT;
+2020-07-30 15:56:01.6167|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [Quotations]
+WHERE [Id] = @p0;
+SELECT @@ROWCOUNT;
+2020-07-30 15:56:01.6317|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [Books]
+WHERE [Id] = @p1;
+SELECT @@ROWCOUNT;
+2020-07-30 15:56:01.6589|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 196.6944ms.
+2020-07-30 15:56:01.6774|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-30 15:56:01.6890|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 281.0598ms
+2020-07-30 15:56:01.6890|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:56:01.7077|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 339.5809ms 204 
+2020-07-30 15:56:32.0591|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1  
+2020-07-30 15:56:32.0591|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-30 15:56:32.0893|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:56:32.1225|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-30 15:56:32.1225|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:56:32.1515|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-30 15:56:32.1515|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.NotFoundResult in 31.1905ms.
+2020-07-30 15:56:32.1834|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2020-07-30 15:56:32.2027|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 99.6165ms
+2020-07-30 15:56:32.2027|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-30 15:56:32.2211|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 162.4421ms 404 application/problem+json; charset=utf-8
+2020-07-30 15:56:38.3988|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/2  
+2020-07-30 15:56:38.4133|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-30 15:56:38.4220|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:56:38.4588|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.GetBook (Books.API) - Validation state: Valid
+2020-07-30 15:56:38.4695|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:56:38.4850|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+FROM [Books] AS [b]
+WHERE [b].[Id] = @__bookId_0
+2020-07-30 15:56:38.5085|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.GetBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 39.7429ms.
+2020-07-30 15:56:38.5290|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Books.API.Models.BookWithoutQuotesDto'.
+2020-07-30 15:56:38.5427|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.GetBook (Books.API) in 106.7862ms
+2020-07-30 15:56:38.5427|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.GetBook (Books.API)'
+2020-07-30 15:56:38.5614|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 162.7524ms 200 application/json; charset=utf-8
+2020-07-30 15:56:49.4716|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/2?deleteEvenIfHasQuotes=false  
+2020-07-30 15:56:49.4850|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:56:49.4850|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteBook", controller = "Books"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteBook(Int32, Boolean) on controller Books.API.Controllers.BooksController (Books.API).
+2020-07-30 15:56:49.5271|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.BooksController.DeleteBook (Books.API) - Validation state: Valid
+2020-07-30 15:56:49.5271|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 15:56:49.5529|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Author], [t].[Description], [t].[Genre], [t].[Title], [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM (
+    SELECT TOP(1) [b].[Id], [b].[Author], [b].[Description], [b].[Genre], [b].[Title]
+    FROM [Books] AS [b]
+    WHERE [b].[Id] = @__bookId_0
+) AS [t]
+LEFT JOIN [Quotations] AS [q] ON [t].[Id] = [q].[BookId]
+ORDER BY [t].[Id], [q].[Id]
+2020-07-30 15:56:49.5757|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Quotations] AS [q]
+        WHERE [q].[BookId] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 15:56:49.5757|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.BooksController.DeleteBook (Books.API), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 50.1282ms.
+2020-07-30 15:56:49.6054|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2020-07-30 15:56:49.6054|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.BooksController.DeleteBook (Books.API) in 109.7146ms
+2020-07-30 15:56:49.6252|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.BooksController.DeleteBook (Books.API)'
+2020-07-30 15:56:49.6354|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 164.2642ms 400 application/json; charset=utf-8
+2020-07-30 16:07:43.9474|INFO|Books.API.Program|Initializing application...
+2020-07-30 16:07:44.9768|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 16:07:45.6329|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (13ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 16:07:45.9791|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 16:07:46.1360|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 16:07:56.4654|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (145ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 16:07:56.5125|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (37ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 16:07:56.5291|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 16:07:56.6026|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 16:07:56.6178|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 16:07:56.6434|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 16:07:56.6607|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 16:07:56.6804|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 16:07:56.7125|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 16:07:56.7244|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 16:07:56.7357|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 16:07:56.7476|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 16:07:56.7634|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 16:07:56.7808|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 16:07:56.7919|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 16:07:56.7919|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 16:07:56.8453|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 16:07:56.8624|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 16:07:56.8729|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 16:07:56.8729|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 16:07:56.9043|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 16:07:56.9043|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 16:07:56.9248|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 16:07:56.9349|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 16:07:56.9349|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 16:07:56.9556|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 16:07:56.9720|INFO|Books.API.Program|Running host...
+2020-07-30 16:07:57.0709|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 16:07:57.0803|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 16:07:57.0878|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 16:07:57.0878|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 16:08:20.0720|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1/quotes  
+2020-07-30 16:08:20.1047|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 16:08:20.1308|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetQuotesForBook", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetQuotesForBook(Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 16:08:20.2795|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) - Validation state: Valid
+2020-07-30 16:08:20.2982|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 16:08:20.4347|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (22ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 16:08:20.4703|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE [q].[BookId] = @__bookId_0
+2020-07-30 16:08:20.5091|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 218.4686ms.
+2020-07-30 16:08:20.5321|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Books.API.Models.QuoteDto, Books.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2020-07-30 16:08:20.6060|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) in 459.8254ms
+2020-07-30 16:08:20.6060|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 16:08:20.6273|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 556.1151ms 200 application/json; charset=utf-8
+2020-07-30 16:08:26.8091|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1/quotes/1  
+2020-07-30 16:08:26.8230|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 16:08:26.8230|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 16:08:26.8652|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API) - Validation state: Valid
+2020-07-30 16:08:26.8930|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 16:08:26.9105|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 16:08:26.9326|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32), @__quoteId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE ([q].[BookId] = @__bookId_0) AND ([q].[Id] = @__quoteId_1)
+2020-07-30 16:08:26.9934|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [Quotations]
+WHERE [Id] = @p0;
+SELECT @@ROWCOUNT;
+2020-07-30 16:08:27.0224|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 148.3845ms.
+2020-07-30 16:08:27.0393|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-30 16:08:27.0506|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 203.8203ms
+2020-07-30 16:08:27.0588|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 16:08:27.0588|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 260.4811ms 204 
+2020-07-30 16:08:32.8965|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1/quotes  
+2020-07-30 16:08:32.9098|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 16:08:32.9195|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetQuotesForBook", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetQuotesForBook(Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 16:08:32.9479|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) - Validation state: Valid
+2020-07-30 16:08:32.9606|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 16:08:32.9746|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 16:08:32.9907|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE [q].[BookId] = @__bookId_0
+2020-07-30 16:08:33.0030|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 42.9485ms.
+2020-07-30 16:08:33.0227|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Books.API.Models.QuoteDto, Books.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2020-07-30 16:08:33.0350|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) in 100.7432ms
+2020-07-30 16:08:33.0433|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 16:08:33.0433|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 157.6142ms 200 application/json; charset=utf-8
+2020-07-30 16:08:42.6485|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1/quotes/77  
+2020-07-30 16:08:42.6620|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 16:08:42.6708|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 16:08:42.7035|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API) - Validation state: Valid
+2020-07-30 16:08:42.7140|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 16:08:42.7140|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 16:08:42.7463|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32), @__quoteId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE ([q].[BookId] = @__bookId_0) AND ([q].[Id] = @__quoteId_1)
+2020-07-30 16:08:42.7463|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API), returned result Microsoft.AspNetCore.Mvc.NotFoundResult in 46.1062ms.
+2020-07-30 16:08:42.7815|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2020-07-30 16:08:42.8020|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 117.6776ms
+2020-07-30 16:08:42.8103|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 16:08:42.8103|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 172.7805ms 404 application/problem+json; charset=utf-8
+2020-07-30 17:29:21.3641|INFO|Books.API.Program|Initializing application...
+2020-07-30 17:29:22.4599|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 17:29:23.2284|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 17:29:23.2910|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2020-07-30 17:29:23.4399|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (15ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [BookInfoDB];
+2020-07-30 17:29:33.8069|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (174ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [BookInfoDB];
+2020-07-30 17:29:33.8533|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (34ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [BookInfoDB] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2020-07-30 17:29:33.8732|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 17:29:33.9534|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2020-07-30 17:29:33.9721|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2020-07-30 17:29:34.0006|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2020-07-30 17:29:34.0214|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2020-07-30 17:29:34.0671|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305171620_BookInfoDBInitialMigration'.
+2020-07-30 17:29:34.1229|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(512) NOT NULL,
+    [Author] nvarchar(256) NOT NULL,
+    [Description] nvarchar(1024) NULL,
+    [Genre] nvarchar(256) NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id])
+);
+2020-07-30 17:29:34.1366|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Quotations] (
+    [Id] int NOT NULL IDENTITY,
+    [Quote] nvarchar(1024) NOT NULL,
+    [BookId] int NOT NULL,
+    CONSTRAINT [PK_Quotations] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Quotations_Books_BookId] FOREIGN KEY ([BookId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2020-07-30 17:29:34.1366|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Quotations_BookId] ON [Quotations] ([BookId]);
+2020-07-30 17:29:34.1624|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305171620_BookInfoDBInitialMigration', N'3.1.2');
+2020-07-30 17:29:34.1799|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200305174452_BookInfoDBAddNotesFieldToQuotation'.
+2020-07-30 17:29:34.1999|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+ALTER TABLE [Quotations] ADD [Notes] nvarchar(1024) NULL;
+2020-07-30 17:29:34.1999|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200305174452_BookInfoDBAddNotesFieldToQuotation', N'3.1.2');
+2020-07-30 17:29:34.2267|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200306134955_SampleData'.
+2020-07-30 17:29:34.2698|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] ON;
+INSERT INTO [Books] ([Id], [Author], [Description], [Title], [Genre])
+VALUES (1, N'Charles Dickens', N'', N'Great Expectations', N''),
+(2, N'George Orwell', N'', N'Animal Farm', N''),
+(3, N'Dashiell Hammett', N'', N'The Maltese Falcon', N''),
+(4, N'E M Forster', N'', N'A Room with a View', N''),
+(5, N'Harper Lee', N'', N'To Kill a Mockingbird', N''),
+(6, N'George Orwell', N'', N'1984', N'Dystopian Fiction'),
+(7, N'Charles Dickens', N'', N'A Christmas Carol', N'Novel'),
+(8, N'Oscar Wilde', N'', N'The Picture of Dorian Gray', N'Novel'),
+(9, N'Ray Bradbury', N'', N'Fahrenheit 451', N'Dystopian Fiction'),
+(10, N'Jack London', N'', N'The Call of the Wild', N'Adventure Fiction'),
+(11, N'Agatha Christie', N'', N'Murder on the Orient Express', N'Crime Fiction');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'Author', N'Description', N'Title', N'Genre') AND [object_id] = OBJECT_ID(N'[Books]'))
+    SET IDENTITY_INSERT [Books] OFF;
+2020-07-30 17:29:34.2886|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] ON;
+INSERT INTO [Quotations] ([Id], [BookId], [Notes], [Quote])
+VALUES (1, 1, N'', N'You are in every line I have ever read.'),
+(2, 1, N'', N'Spring is the time of year when it is summer in the sun and winter in the shade.'),
+(3, 2, N'', N'All animals are equal, but some animals are more equal than others.'),
+(4, 2, N'', N'Four legs good, two legs bad.'),
+(5, 2, N'', N'This work was strictly voluntary, but any animal who absented himself from it would have his rations reduced by half.'),
+(6, 3, N'', N' I wanted it, and I''m not a man that''s easily discouraged when he wants something.'),
+(7, 3, N'', N'You know how to do things ... you''ll land on your feet in the end.'),
+(8, 3, N'', N'The cheaper the crook, the gaudier the patter.'),
+(9, 4, N'', N'Life is easy to chronicle, but bewildering to practice.'),
+(10, 4, N'', N'Of course he despised the world as a whole; every thoughtful man should; it is almost a test of refinement.'),
+(11, 4, N'', N'The world is certainly full of beautiful things, if only I could come across them.'),
+(12, 5, N'', N'You never really understand a person until you consider things from his point of view... Until you climb inside of his skin and walk around in it.'),
+(13, 5, N'', N'People generally see what they look for, and hear what they listen for.'),
+(14, 5, N'', N'Lawyers, I suppose were once children, too.');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'BookId', N'Notes', N'Quote') AND [object_id] = OBJECT_ID(N'[Quotations]'))
+    SET IDENTITY_INSERT [Quotations] OFF;
+2020-07-30 17:29:34.3004|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200306134955_SampleData', N'3.1.2');
+2020-07-30 17:29:34.3142|INFO|Microsoft.EntityFrameworkCore.Migrations|Applying migration '20200623160411_SampleData2'.
+2020-07-30 17:29:34.3367|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Political Satire'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2020-07-30 17:29:34.3497|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Crime Fiction'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2020-07-30 17:29:34.3621|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 4;
+SELECT @@ROWCOUNT;
+2020-07-30 17:29:34.3738|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Bildungsroman'
+WHERE [Id] = 5;
+SELECT @@ROWCOUNT;
+2020-07-30 17:29:34.3860|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+UPDATE [Books] SET [Genre] = N'Novel'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2020-07-30 17:29:34.3860|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20200623160411_SampleData2', N'3.1.2');
+2020-07-30 17:29:34.4136|INFO|Books.API.Program|Running host...
+2020-07-30 17:29:34.5217|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:51004
+2020-07-30 17:29:34.5317|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2020-07-30 17:29:34.5317|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2020-07-30 17:29:34.5473|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\Dev\source\repos\PS\Books\Books.API
+2020-07-30 17:30:58.1643|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1/quotes  
+2020-07-30 17:30:58.1961|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 17:30:58.2213|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetQuotesForBook", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetQuotesForBook(Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:30:58.3692|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) - Validation state: Valid
+2020-07-30 17:30:58.3887|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 17:30:58.5259|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (22ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 17:30:58.5625|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE [q].[BookId] = @__bookId_0
+2020-07-30 17:30:58.6011|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 220.7408ms.
+2020-07-30 17:30:58.6238|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Books.API.Models.QuoteDto, Books.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2020-07-30 17:30:58.6954|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) in 458.5326ms
+2020-07-30 17:30:58.7039|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 17:30:58.7168|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 553.42ms 200 application/json; charset=utf-8
+2020-07-30 17:34:09.4502|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1/quotes/1  
+2020-07-30 17:34:09.4647|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:34:09.4831|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:34:09.5147|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API) - Validation state: Valid
+2020-07-30 17:34:09.5428|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 17:34:09.5586|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 17:34:09.5810|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__bookId_0='?' (DbType = Int32), @__quoteId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE ([q].[BookId] = @__bookId_0) AND ([q].[Id] = @__quoteId_1)
+2020-07-30 17:34:09.6430|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DELETE FROM [Quotations]
+WHERE [Id] = @p0;
+SELECT @@ROWCOUNT;
+2020-07-30 17:34:09.6646|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API), returned result Microsoft.AspNetCore.Mvc.NoContentResult in 140.8402ms.
+2020-07-30 17:34:09.6817|INFO|Microsoft.AspNetCore.Mvc.StatusCodeResult|Executing HttpStatusCodeResult, setting HTTP status code 204
+2020-07-30 17:34:09.6928|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 196.2762ms
+2020-07-30 17:34:09.7012|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:34:09.7012|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 261.7096ms 204 
+2020-07-30 17:36:05.9110|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET http://localhost:51004/api/books/1/quotes  
+2020-07-30 17:36:05.9461|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 17:36:05.9551|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetQuotesForBook", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetQuotesForBook(Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:36:05.9816|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) - Validation state: Valid
+2020-07-30 17:36:05.9816|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 17:36:06.0075|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 17:36:06.0236|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE [q].[BookId] = @__bookId_0
+2020-07-30 17:36:06.0361|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 45.4921ms.
+2020-07-30 17:36:06.0554|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Books.API.Models.QuoteDto, Books.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2020-07-30 17:36:06.0672|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API) in 98.5652ms
+2020-07-30 17:36:06.0814|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.GetQuotesForBook (Books.API)'
+2020-07-30 17:36:06.0916|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 180.7962ms 200 application/json; charset=utf-8
+2020-07-30 17:38:52.1148|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1/quotes/40000  
+2020-07-30 17:38:52.1491|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:38:52.1583|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:38:52.2319|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API) - Validation state: Valid
+2020-07-30 17:38:52.2463|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 17:38:52.2611|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 17:38:52.2791|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32), @__quoteId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [q].[Id], [q].[BookId], [q].[Notes], [q].[Quote]
+FROM [Quotations] AS [q]
+WHERE ([q].[BookId] = @__bookId_0) AND ([q].[Id] = @__quoteId_1)
+2020-07-30 17:38:52.2791|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API), returned result Microsoft.AspNetCore.Mvc.NotFoundResult in 48.8954ms.
+2020-07-30 17:38:52.3130|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2020-07-30 17:38:52.3351|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 142.2789ms
+2020-07-30 17:38:52.3465|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:38:52.3592|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 244.3093ms 404 application/problem+json; charset=utf-8
+2020-07-30 17:40:54.4094|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/50000/quotes/1  
+2020-07-30 17:40:54.4233|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:40:54.4322|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:40:54.4655|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executing action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API) - Validation state: Valid
+2020-07-30 17:40:54.4655|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 3.1.2 initialized 'BookInfoContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2020-07-30 17:40:54.4920|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__bookId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Books] AS [b]
+        WHERE [b].[Id] = @__bookId_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2020-07-30 17:40:54.5034|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action method Books.API.Controllers.QuotesController.DeleteQuote (Books.API), returned result Microsoft.AspNetCore.Mvc.NotFoundResult in 26.2633ms.
+2020-07-30 17:40:54.5218|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2020-07-30 17:40:54.5337|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 87.8567ms
+2020-07-30 17:40:54.5429|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:40:54.5429|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 144.2006ms 404 application/problem+json; charset=utf-8
+2020-07-30 17:49:01.1282|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/50000/quotes/hghg  
+2020-07-30 17:49:01.1420|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:49:01.1506|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:49:01.1962|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-30 17:49:01.2183|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 54.2174ms
+2020-07-30 17:49:01.2304|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:49:01.2304|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 112.6665ms 400 application/problem+json; charset=utf-8
+2020-07-30 17:49:30.5846|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 DELETE http://localhost:51004/api/books/1/quotes/thisiswrong  
+2020-07-30 17:49:30.5977|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:49:30.6067|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "DeleteQuote", controller = "Quotes"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult DeleteQuote(Int32, Int32) on controller Books.API.Controllers.QuotesController (Books.API).
+2020-07-30 17:49:30.6481|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2020-07-30 17:49:30.6603|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action Books.API.Controllers.QuotesController.DeleteQuote (Books.API) in 40.1317ms
+2020-07-30 17:49:30.6717|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'Books.API.Controllers.QuotesController.DeleteQuote (Books.API)'
+2020-07-30 17:49:30.6717|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished in 97.1438ms 400 application/problem+json; charset=utf-8
